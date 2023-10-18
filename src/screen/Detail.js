@@ -27,8 +27,28 @@ const Detail = ({route, navigation}) => {
     fetchDataFromApi();
   }, [slug]);
 
+  const handleBackPress = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
+      <TouchableOpacity onPress={handleBackPress} style={{zIndex: 99}}>
+        <Image
+          source={require('../asset/icon/back.png')}
+          resizeMode="contain"
+          style={{
+            zIndex: 2,
+            backgroundColor: '#fafafa',
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            borderRadius: 35,
+            width: 40,
+            height: 40,
+          }}
+        />
+      </TouchableOpacity>
       <ScrollView>
         {data.truyen ? (
           <>
@@ -175,7 +195,14 @@ const Detail = ({route, navigation}) => {
             />
           </>
         ) : (
-          <Text style={{color: '#fafafa'}}>Dữ liệu không khả dụng</Text>
+          <Text
+            style={{
+              color: '#fafafa',
+              textAlign: 'center',
+              justifyContent: 'center',
+            }}>
+            Đang tải...
+          </Text>
         )}
       </ScrollView>
     </View>

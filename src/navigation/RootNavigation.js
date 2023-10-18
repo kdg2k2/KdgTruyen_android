@@ -37,8 +37,8 @@ function BottomTab() {
         headerShown: false,
       }}>
       <Tab.Screen
-        name="KdgTruyen"
-        component={StackNavigator}
+        name="Home"
+        component={Home}
         options={{
           tabBarIcon: ({focused}) => {
             return (
@@ -97,7 +97,11 @@ function BottomTab() {
 function RootNavigation() {
   return (
     <NavigationContainer>
-      <BottomTab />
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="BottomTab" component={BottomTab} />
+      <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="Reading" component={Reading} />
+    </Stack.Navigator>
     </NavigationContainer>
   );
 }
