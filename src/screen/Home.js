@@ -1,24 +1,37 @@
 // src/screen/Home.js
 
 import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, Text, Image, FlatList} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import fetchData from '../api/api';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const fetchDataFromApi = async () => {
+    try {
+      const result = await fetchData('home');
+      setData(result);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchDataFromApi = async () => {
-      try {
-        const result = await fetchData('home');
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
     fetchDataFromApi();
   }, []);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchDataFromApi().then(() => setRefreshing(false));
+  };
 
   return (
     <FlatList
@@ -45,6 +58,9 @@ const Home = ({navigation}) => {
       )}
       keyExtractor={item => item.id.toString()}
       ListEmptyComponent={<Text>No data</Text>}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
     />
   );
 };

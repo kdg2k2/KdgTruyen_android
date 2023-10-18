@@ -8,25 +8,32 @@ import {
   Image,
   FlatList,
   TextInput,
+  RefreshControl,
 } from 'react-native';
 import fetchData from '../api/api';
 
 const List = ({navigation}) => {
   const [data, setData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  useEffect(() => {
-    const fetchDataFromApi = async () => {
-      try {
-        const result = await fetchData('list');
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const fetchDataFromApi = async () => {
+    try {
+      const result = await fetchData('list');
+      setData(result);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchDataFromApi();
   }, []);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchDataFromApi().then(() => setRefreshing(false));
+  };
 
   // Hàm lọc danh sách dựa trên từ khóa tìm kiếm
   const filteredData = data.filter(item =>
@@ -73,6 +80,9 @@ const List = ({navigation}) => {
         )}
         keyExtractor={item => item.id.toString()}
         ListEmptyComponent={<Text>No data</Text>}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
       />
     </View>
   );
