@@ -1,11 +1,19 @@
-// src/screen/Home.js
+// src/screen/List.js
 
 import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, Text, Image, FlatList} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  FlatList,
+  TextInput,
+} from 'react-native';
 import fetchData from '../api/api';
 
-const Home = ({navigation}) => {
+const List = ({navigation}) => {
   const [data, setData] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -20,33 +28,54 @@ const Home = ({navigation}) => {
     fetchDataFromApi();
   }, []);
 
+  // Hàm lọc danh sách dựa trên từ khóa tìm kiếm
+  const filteredData = data.filter(item =>
+    item.tentruyen.toLowerCase().includes(searchText.toLowerCase()),
+  );
+
   return (
-    <FlatList
-      style={{backgroundColor: '#000'}}
-      data={data}
-      numColumns={2} // Hiển thị 2 phần tử mỗi dòng
-      renderItem={({item}) => (
-        <View style={{margin: 5, flex: 1}}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Detail', {slug: item.slug});
-            }}>
-            <Image
-              style={{width: 170, height: 250}}
-              source={{
-                uri: `http://127.0.0.1:8000/${item.path}`,
-              }}
-            />
-            <Text style={{color: '#fafafa', textAlign: 'center'}}>
-              {item.tentruyen}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      keyExtractor={item => item.id.toString()}
-      ListEmptyComponent={<Text>No data</Text>}
-    />
+    <View style={{flex: 1}}>
+      {/* Thanh tìm kiếm */}
+      <TextInput
+        style={{
+          height: 40,
+          borderColor: 'gray',
+          borderWidth: 1,
+          borderRadius: 10,
+          margin: 10,
+          paddingLeft: 10,
+          borderColor: 'green',
+        }}
+        placeholder="Nhập từ khóa tìm kiếm"
+        onChangeText={text => setSearchText(text)}
+        value={searchText}
+      />
+      {/* Danh sách truyện tranh */}
+      <FlatList
+        style={{backgroundColor: '#000'}}
+        data={filteredData}
+        numColumns={2}
+        renderItem={({item}) => (
+          <View style={{margin: 5, flex: 1}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Detail', {slug: item.slug});
+              }}>
+              <Image
+                style={{width: 170, height: 250}}
+                source={{
+                  uri: `http://127.0.0.1:8000/${item.path}`,
+                }}
+              />
+              <Text style={{color: '#fafafa'}}>{item.tentruyen}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={item => item.id.toString()}
+        ListEmptyComponent={<Text>No data</Text>}
+      />
+    </View>
   );
 };
 
-export default Home;
+export default List;

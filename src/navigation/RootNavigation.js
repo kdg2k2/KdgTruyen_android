@@ -6,7 +6,7 @@ import List from '../screen/List';
 import Detail from '../screen/Detail';
 import Reading from '../screen/Reading';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, Text, View} from 'react-native';
+import {Image, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,17 +26,15 @@ function BottomTab() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarShowLabel: false,
         tabBarStyle: {
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
           backgroundColor: '#fff',
           elevation: 0,
           borderRadius: 15,
           height: 60,
         },
+        tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
+        headerShown: false,
       }}>
       <Tab.Screen
         name="KdgTruyen"
@@ -57,7 +55,7 @@ function BottomTab() {
                     width: 25,
                     height: 25,
                     marginBottom: 15,
-                    tintColor: focused ? '#e32f45' : '#747c94',
+                    tintColor: focused ? 'green' : '#747c94',
                   }}
                 />
               </View>
@@ -84,7 +82,7 @@ function BottomTab() {
                     width: 25,
                     height: 25,
                     marginBottom: 15,
-                    tintColor: focused ? '#e32f45' : '#747c94',
+                    tintColor: focused ? 'green' : '#747c94',
                   }}
                 />
               </View>
