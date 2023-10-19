@@ -5,22 +5,14 @@ import Home from '../screen/Home';
 import List from '../screen/List';
 import Detail from '../screen/Detail';
 import Reading from '../screen/Reading';
+import CategoryFilter from '../screen/CategoryFilter';
+import ListFilter from '../screen/ListFilter';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 const Stack = createNativeStackNavigator();
-
-function StackNavigator() {
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Detail" component={Detail} />
-      <Stack.Screen name="Reading" component={Reading} />
-    </Stack.Navigator>
-  );
-}
 
 function BottomTab() {
   return (
@@ -101,6 +93,8 @@ function RootNavigation() {
       <Stack.Screen name="BottomTab" component={BottomTab} />
       <Stack.Screen name="Detail" component={Detail} />
       <Stack.Screen name="Reading" component={Reading} />
+      <Stack.Screen name="CategoryFilter" component={CategoryFilter} />
+      <Stack.Screen name="ListFilter" component={ListFilter} />
     </Stack.Navigator>
     </NavigationContainer>
   );

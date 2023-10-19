@@ -14,7 +14,8 @@ import {
 } from 'react-native';
 import fetchData from '../api/api';
 
-const List = ({navigation}) => {
+const ListFilter = ({navigation, route}) => {
+  const {id} = route.params;
   const [data, setData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -22,7 +23,7 @@ const List = ({navigation}) => {
 
   const fetchDataFromApi = async () => {
     try {
-      const result = await fetchData('list');
+      const result = await fetchData('list/' + id);
       setData(result);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -38,10 +39,53 @@ const List = ({navigation}) => {
     fetchDataFromApi().then(() => setRefreshing(false));
   };
 
+  const handleBackPress = () => {
+    navigation.goBack();
+  };
+
   // Hàm lọc danh sách dựa trên từ khóa tìm kiếm
   const filteredData = data.filter(item =>
     item.tentruyen.toLowerCase().includes(searchText.toLowerCase()),
   );
+
+  if (data.length <= 0) {
+    return (
+      <View
+        style={{
+          backgroundColor: '#000',
+          // flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            height: 40,
+            borderRadius: 40,
+            position: 'absolute',
+            top: 10,
+            left: 10,
+          }}>
+          <TouchableOpacity onPress={handleBackPress} style={{zIndex: 99}}>
+            <Image
+              source={require('../asset/icon/back.png')}
+              resizeMode="contain"
+              style={{
+                width: 40,
+                height: 40,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text
+          style={{
+            color: '#fff',
+          }}>
+          Không có dữ liệu
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -53,16 +97,18 @@ const List = ({navigation}) => {
           flexWrap: 'wrap',
           justifyContent: 'space-between',
         }}>
-        <Text
-          style={{
-            color: '#000',
-            fontWeight: 'bold',
-            fontSize: 20,
-            marginLeft: 10,
-            lineHeight: 50,
-          }}>
-          KdgTruyen
-        </Text>
+        <TouchableOpacity onPress={handleBackPress} style={{zIndex: 99}}>
+          <Image
+            source={require('../asset/icon/back.png')}
+            resizeMode="contain"
+            style={{
+              width: 40,
+              height: 40,
+              marginTop: 5,
+              marginLeft: 10,
+            }}
+          />
+        </TouchableOpacity>
         <View
           style={{
             flexDirection: 'row',
@@ -179,4 +225,4 @@ const List = ({navigation}) => {
   );
 };
 
-export default List;
+export default ListFilter;

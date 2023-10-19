@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import fetchData from '../api/api';
 
-const Detail = ({ route, navigation }) => {
-  const { slug } = route.params;
+const Detail = ({route, navigation}) => {
+  const {slug} = route.params;
   const [data, setData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -41,8 +41,8 @@ const Detail = ({ route, navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#000' }}>
-      <TouchableOpacity onPress={handleBackPress} style={{ zIndex: 99 }}>
+    <View style={{flex: 1, backgroundColor: '#000'}}>
+      <TouchableOpacity onPress={handleBackPress} style={{zIndex: 99}}>
         <Image
           source={require('../asset/icon/back.png')}
           resizeMode="contain"
@@ -61,8 +61,7 @@ const Detail = ({ route, navigation }) => {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
+        }>
         {data.truyen ? (
           <>
             <View
@@ -70,9 +69,9 @@ const Detail = ({ route, navigation }) => {
                 flexDirection: 'row',
                 marginBottom: 3,
               }}>
-              <View style={{ marginTop: 10 }}>
+              <View style={{marginTop: 10}}>
                 <Image
-                  style={{ width: 100, height: 150 }}
+                  style={{width: 100, height: 150}}
                   source={{
                     uri: `http://127.0.0.1:8000/${data.truyen.path}`,
                   }}
@@ -124,7 +123,7 @@ const Detail = ({ route, navigation }) => {
                     }}>
                     {data.truyen.tentruyen}
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <Image
                       source={require('../asset/icon/eye.png')}
                       resizeMode="contain"
@@ -135,12 +134,12 @@ const Detail = ({ route, navigation }) => {
                         marginRight: 5,
                       }}
                     />
-                    <Text style={{ color: '#fafafa', marginBottom: 5 }}>
+                    <Text style={{color: '#fafafa', marginBottom: 5}}>
                       {data.truyen.view}
                     </Text>
                   </View>
 
-                  <View style={{ flexDirection: 'row', flex: 1 }}>
+                  <View style={{flexDirection: 'row', flex: 1}}>
                     <Image
                       source={require('../asset/icon/waiting.png')}
                       resizeMode="contain"
@@ -151,7 +150,7 @@ const Detail = ({ route, navigation }) => {
                         marginRight: 5,
                       }}
                     />
-                    <Text style={{ color: '#fafafa', marginBottom: 5 }}>
+                    <Text style={{color: '#fafafa', marginBottom: 5}}>
                       {' '}
                       {data.truyen.status === 0
                         ? 'Đang tiến hành'
@@ -160,22 +159,27 @@ const Detail = ({ route, navigation }) => {
                   </View>
                 </View>
 
-                <Text style={{ color: '#fafafa', marginBottom: 5 }}>
+                <Text style={{color: '#fafafa', marginBottom: 5}}>
                   Tác giả:{' '}
-                  {data.arr_tacgia.map((item) => item.tentacgia).join(', ')}
+                  {data.arr_tacgia.map(item => item.tentacgia).join(', ')}
                 </Text>
 
                 <View style={styles.container}>
                   {data.arr_theloai.map((item, index) => (
-                    <Text key={index} style={styles.text}>
-                      {item.tentheloai}
-                    </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('ListFilter', {id: item.id});
+                      }}>
+                      <Text key={index} style={styles.text}>
+                        {item.tentheloai}
+                      </Text>
+                    </TouchableOpacity>
                   ))}
                 </View>
               </View>
             </View>
 
-            <Text style={{ color: '#fafafa', marginBottom: 10 }}>
+            <Text style={{color: '#fafafa', marginBottom: 10}}>
               {data.truyen.mota}
             </Text>
           </>
@@ -193,8 +197,8 @@ const Detail = ({ route, navigation }) => {
 
       <FlatList
         data={data.arr_tap}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => (
           <View>
             <TouchableOpacity
               onPress={() => {
