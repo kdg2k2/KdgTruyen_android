@@ -74,7 +74,15 @@ const List = ({navigation}) => {
                   uri: `http://127.0.0.1:8000/${item.path}`,
                 }}
               />
-              <Text style={{color: '#fafafa'}}>{item.tentruyen}</Text>
+              <Text
+                style={{
+                  color: '#fafafa',
+                  textAlign: 'center',
+                  maxWidth: 170,
+                  overflow: 'hidden',
+                }}>
+                {item.tentruyen}
+              </Text>
             </TouchableOpacity>
           </View>
         )}

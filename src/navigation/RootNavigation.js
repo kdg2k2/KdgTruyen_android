@@ -82,7 +82,7 @@ function BottomTab() {
                     width: 25,
                     height: 25,
                     marginBottom: 15,
-                    tintColor: focused ? 'green' : '#747c94',
+                    tintColor: focused ? '#FF6600' : '#747c94',
                   }}
                 />
               </View>
