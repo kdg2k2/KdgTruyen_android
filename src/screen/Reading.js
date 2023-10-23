@@ -10,6 +10,18 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import fetchData from '../api/api';
+import SQLite from 'react-native-sqlite-storage';
+
+const db = SQLite.openDatabase(
+  {
+    name: 'kdgtruyen',
+    location: 'default',
+  },
+  () => {},
+  error => {
+    console.log(error);
+  },
+);
 
 const Reading = ({route, navigation}) => {
   const {slug} = route.params;
@@ -26,6 +38,11 @@ const Reading = ({route, navigation}) => {
       try {
         const result = await fetchData(slug + '/' + id);
         setData(result);
+
+        //insert lịch sử
+        createTable();
+        insertLichsu(result.truyen.tentruyen,result.truyen.slug,result.tentap,result.id_tap);
+        showLichsu();
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -37,6 +54,32 @@ const Reading = ({route, navigation}) => {
   const handleBackPress = () => {
     navigation.goBack();
   };
+
+  const createTable=()=>{
+    db.transaction((tx) =>{
+      tx.executeSql("CREATE TABLE IF NOT EXISTS lichsu (id INTEGER PRIMARY KEY AUTOINCREMENT, tentruyen TEXT, slug TEXT, tentap TEXT, id_tap INTEGER);");
+    })
+  }
+
+  const insertLichsu=(tentruyen, slug, tentap, id_tap)=>{
+    db.transaction((tx) =>{
+      tx.executeSql('INSERT INTO lichsu (tentruyen, slug, tentap, id_tap) VALUES (?, ?, ?, ?);', [tentruyen, slug, tentap, id_tap]);
+    })
+  }
+
+  const showLichsu=()=>{
+    db.transaction((tx) => {
+      tx.executeSql('SELECT * FROM lichsu', [], (tx, results) => {
+        console.log(results.rows.length);
+        if (results.rows.length > 0) {
+          console.log(results.rows.item(0).tentruyen);
+          console.log(results.rows.item(0).slug);
+          console.log(results.rows.item(0).tentap);
+          console.log(results.rows.item(0).id_tap);
+        }
+      });
+    });
+  }
 
   return (
     <View style={{flex: 1}}>
@@ -104,7 +147,7 @@ const Reading = ({route, navigation}) => {
           onPress={() => {
             setModalVisible(false);
           }}>
-            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+          <View style={{flex: 1, justifyContent: 'flex-end'}}>
             <View
               style={{
                 backgroundColor: 'white',
