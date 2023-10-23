@@ -166,11 +166,11 @@ const Detail = ({route, navigation}) => {
 
                 <View style={styles.container}>
                   {data.arr_theloai.map((item, index) => (
-                    <TouchableOpacity
+                    <TouchableOpacity key={index}
                       onPress={() => {
                         navigation.navigate('ListFilter', {id: item.id});
                       }}>
-                      <Text key={index} style={styles.text}>
+                      <Text  style={styles.text}>
                         {item.tentheloai}
                       </Text>
                     </TouchableOpacity>
