@@ -39,9 +39,15 @@ const Reading = ({route, navigation}) => {
         const result = await fetchData(slug + '/' + id);
         setData(result);
 
-        //insert lịch sử
+        // dropTable();
         createTable();
-        insertLichsu(result.truyen.tentruyen,result.truyen.slug,result.tentap,result.id_tap);
+        insertLichsu(
+          result.truyen.tentruyen,
+          result.truyen.slug,
+          result.tentap,
+          result.id_tap,
+          result.truyen.id,
+        );
         showLichsu();
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -55,20 +61,50 @@ const Reading = ({route, navigation}) => {
     navigation.goBack();
   };
 
-  const createTable=()=>{
-    db.transaction((tx) =>{
-      tx.executeSql("CREATE TABLE IF NOT EXISTS lichsu (id INTEGER PRIMARY KEY AUTOINCREMENT, tentruyen TEXT, slug TEXT, tentap TEXT, id_tap INTEGER);");
-    })
-  }
+  const createTable = () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS lichsu (id INTEGER PRIMARY KEY AUTOINCREMENT, tentruyen TEXT, slug TEXT, tentap TEXT, id_tap INTEGER, id_truyen INTEGER);',
+      );
+    });
+    console.log('created table');
+  };
 
-  const insertLichsu=(tentruyen, slug, tentap, id_tap)=>{
-    db.transaction((tx) =>{
-      tx.executeSql('INSERT INTO lichsu (tentruyen, slug, tentap, id_tap) VALUES (?, ?, ?, ?);', [tentruyen, slug, tentap, id_tap]);
-    })
-  }
+  const dropTable = () => {
+    db.transaction(tx => {
+      tx.executeSql('DROP TABLE IF EXISTS lichsu;');
+    });
+    console.log('droped table');
+  };
 
-  const showLichsu=()=>{
-    db.transaction((tx) => {
+  const insertLichsu = (tentruyen, slug, tentap, id_tap, id_truyen) => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM lichsu', [], (tx, results) => {
+        if (results.rows.length > 0) {
+          if (results.rows.item(0).id_truyen == id_truyen) {
+            tx.executeSql(
+              'UPDATE lichsu SET tentruyen =?, slug =?, tentap =?, id_tap =? WHERE id_truyen =?',
+              [tentruyen, slug, tentap, id_tap, id_truyen],
+            );
+            console.log('update');
+          } else {
+            tx.executeSql(
+              'INSERT INTO lichsu (tentruyen, slug, tentap, id_tap, id_truyen) VALUES (?, ?, ?, ?, ?);',
+              [tentruyen, slug, tentap, id_tap, id_truyen],
+            );
+          }
+        } else {
+          tx.executeSql(
+            'INSERT INTO lichsu (tentruyen, slug, tentap, id_tap, id_truyen) VALUES (?, ?, ?, ?, ?);',
+            [tentruyen, slug, tentap, id_tap, id_truyen],
+          );
+        }
+      });
+    });
+  };
+
+  const showLichsu = () => {
+    db.transaction(tx => {
       tx.executeSql('SELECT * FROM lichsu', [], (tx, results) => {
         console.log(results.rows.length);
         if (results.rows.length > 0) {
@@ -76,10 +112,11 @@ const Reading = ({route, navigation}) => {
           console.log(results.rows.item(0).slug);
           console.log(results.rows.item(0).tentap);
           console.log(results.rows.item(0).id_tap);
+          console.log(results.rows.item(0).id_truyen);
         }
       });
     });
-  }
+  };
 
   return (
     <View style={{flex: 1}}>
