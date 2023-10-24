@@ -1,5 +1,3 @@
-// src/screen/List.js
-
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -61,7 +59,7 @@ const List = ({navigation}) => {
             marginLeft: 10,
             lineHeight: 50,
           }}>
-          KdgTruyen
+          Danh sách
         </Text>
         <View
           style={{
