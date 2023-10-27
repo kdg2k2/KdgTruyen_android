@@ -51,7 +51,7 @@ const ListFilter = ({navigation, route}) => {
       <View
         style={{
           backgroundColor: '#000',
-          // flex: 1,
+          flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
         }}>

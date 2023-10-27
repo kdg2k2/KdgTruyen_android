@@ -42,9 +42,9 @@ function BottomTab() {
                   justifyContent: 'center',
                   top: 10,
                 }}>
-                  <View
+                <View
                   style={{
-                    backgroundColor: focused ? '#FF3333' : '#fff',
+                    backgroundColor: focused ? '#6633FF' : '#fff',
                     borderRadius: 30,
                     marginBottom: 15,
                     padding: 10,
@@ -78,7 +78,7 @@ function BottomTab() {
                 }}>
                 <View
                   style={{
-                    backgroundColor: focused ? '#009966' : '#fff',
+                    backgroundColor: focused ? '#4F4F4F' : '#fff',
                     borderRadius: 30,
                     marginBottom: 15,
                     padding: 10,
@@ -110,7 +110,7 @@ function BottomTab() {
                   justifyContent: 'center',
                   top: 10,
                 }}>
-                  <View
+                <View
                   style={{
                     backgroundColor: focused ? '#FF6600' : '#fff',
                     borderRadius: 30,

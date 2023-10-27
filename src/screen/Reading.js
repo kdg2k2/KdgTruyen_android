@@ -80,7 +80,7 @@ const Reading = ({route, navigation}) => {
 
   const dropTable = () => {
     db.transaction(tx => {
-      tx.executeSql('Delete from lichsu;');
+      tx.executeSql('DROP TABLE lichsu;');
     });
     console.log('clean table');
   };

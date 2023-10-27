@@ -6,8 +6,8 @@ import {
   Image,
   FlatList,
   RefreshControl,
-  TouchableWithoutFeedback,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
 
@@ -24,10 +24,11 @@ const db = SQLite.openDatabase(
 
 const History = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]); // Dữ liệu FlatList
 
   const handleRefresh = () => {
     setRefreshing(true);
+    setData([]); // Xóa dữ liệu
     db.transaction(tx => {
       tx.executeSql('SELECT * FROM lichsu', [], (tx, results) => {
         if (results.rows.length > 0) {
@@ -58,9 +59,25 @@ const History = ({navigation}) => {
     });
   }, []);
 
+  const cleanTable = () => {
+    db.transaction(tx => {
+      tx.executeSql('Delete from lichsu;');
+    });
+    console.log('clean table');
+  };
+
+  const {height} = Dimensions.get('window');
+
   if (!data || data.length <= 0) {
     return (
-      <View style={{flex: 1, backgroundColor: '#000'}}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        style={{
+          backgroundColor: '#000',
+          flex: 1,
+        }}>
         <View
           style={{
             backgroundColor: '#fff',
@@ -79,21 +96,42 @@ const History = ({navigation}) => {
             }}>
             Lịch sử đọc
           </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              marginRight: 10,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                cleanTable();
+                handleRefresh();
+              }}>
+              <Image
+                source={require('../asset/icon/trash-bin.png')}
+                resizeMode="contain"
+                style={{
+                  width: 40,
+                  height: 40,
+                  marginTop: 5,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-        {/* Danh sách truyện tranh */}
         <View
           style={{
-            textAlign: 'center',
-            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: height / 2.5,
           }}>
           <Text
             style={{
               color: '#fff',
             }}>
-            Không có dữ liệu
+            Chưa có lịch sử
           </Text>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 
@@ -117,45 +155,65 @@ const History = ({navigation}) => {
           }}>
           Lịch sử đọc
         </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            marginRight: 10,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              cleanTable();
+              handleRefresh();
+            }}>
+            <Image
+              source={require('../asset/icon/trash-bin.png')}
+              resizeMode="contain"
+              style={{
+                width: 40,
+                height: 40,
+                marginTop: 5,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       {/* Danh sách truyện tranh */}
       <FlatList
         style={{backgroundColor: '#000'}}
         columnWrapperStyle={{justifyContent: 'space-between'}}
+        extraData={refreshing}
         data={data}
         numColumns={2}
         renderItem={({item}) => (
           <View
             style={{
               margin: 5,
+              width: 170,
+              position: 'relative',
             }}>
-            <View
-              style={{
-                width: 170,
-                position: 'relative',
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Detail', {slug: item.slug});
               }}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('Detail', {slug: item.slug});
+              <Image
+                style={{width: 170, height: 250}}
+                source={{
+                  uri: `http://127.0.0.1:8000/${item.path}`,
+                }}
+              />
+              <Text
+                style={{
+                  color: '#fafafa',
+                  textAlign: 'center',
+                  maxWidth: 170,
+                  overflow: 'hidden',
+                  fontWeight: 'bold',
                 }}>
-                <Image
-                  style={{width: 170, height: 250}}
-                  source={{
-                    uri: `http://127.0.0.1:8000/${item.path}`,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: '#fafafa',
-                    textAlign: 'center',
-                    maxWidth: 170,
-                    overflow: 'hidden',
-                    fontWeight: 'bold',
-                  }}>
-                  {item.tentruyen}
-                </Text>
+                {item.tentruyen}
+              </Text>
 
-                <TouchableOpacity
+              <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('Reading', {
                     slug: item.slug,
@@ -177,8 +235,7 @@ const History = ({navigation}) => {
                   Đọc tới {item.tentap}
                 </Text>
               </TouchableOpacity>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           </View>
         )}
         keyExtractor={item => item.id.toString()}

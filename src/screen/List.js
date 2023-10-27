@@ -144,7 +144,11 @@ const List = ({navigation}) => {
         data={filteredData}
         numColumns={2}
         renderItem={({item}) => (
-          <View style={{margin: 5, flex: 1}}>
+          <View
+            style={{
+              margin: 5,
+              width: 170,
+            }}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('Detail', {slug: item.slug});
