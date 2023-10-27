@@ -32,6 +32,7 @@ const Reading = ({route, navigation}) => {
 
   const [data, setData] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -61,7 +62,6 @@ const Reading = ({route, navigation}) => {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchDataFromApi();
   }, [slug, id]);
 
@@ -82,7 +82,7 @@ const Reading = ({route, navigation}) => {
     db.transaction(tx => {
       tx.executeSql('DROP TABLE lichsu;');
     });
-    console.log('clean table');
+    console.log('droped table');
   };
 
   const insertLichsu = (tentruyen, slug, tentap, id_tap, id_truyen, path) => {
@@ -129,6 +129,15 @@ const Reading = ({route, navigation}) => {
         }
       });
     });
+  };
+
+  const handleScrollEnd = event => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const viewSize = event.nativeEvent.layoutMeasurement.width;
+    const currentIndex = Math.floor(contentOffsetX / viewSize);
+    setCurrentIndex(currentIndex);
+    const currentItem = data.arr_path[currentIndex];
+    console.log('Lướt đến item:', currentItem);
   };
 
   return (
@@ -280,6 +289,11 @@ const Reading = ({route, navigation}) => {
             />
           </View>
         )}
+        // onScrollEndDrag={() => console.log('end')}
+        // onScrollBeginDrag={() => console.log('start')}
+
+        onMomentumScrollEnd={handleScrollEnd}
+        onScrollBeginDrag={() => console.log('Bắt đầu lướt')}
       />
     </View>
   );
