@@ -5,202 +5,190 @@ import {
   Text,
   Image,
   FlatList,
-  TextInput,
   RefreshControl,
-  Modal,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
-import fetchData from '../api/api';
+import SQLite from 'react-native-sqlite-storage';
+
+const db = SQLite.openDatabase(
+  {
+    name: 'kdgtruyen',
+    location: 'default',
+  },
+  () => {},
+  error => {
+    console.log(error);
+  },
+);
 
 const History = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [searchText, setSearchText] = useState('');
+  const [data, setData] = useState(null);
 
   const handleRefresh = () => {
     setRefreshing(true);
-    fetchDataFromApi().then(() => setRefreshing(false));
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM lichsu', [], (tx, results) => {
+        if (results.rows.length > 0) {
+          const fetchedData = [];
+          for (let index = 0; index < results.rows.length; index++) {
+            const row = results.rows.item(index);
+            fetchedData.push(row);
+          }
+          setData(fetchedData);
+        }
+      });
+    });
+    setRefreshing(false);
   };
 
-  const handleBackPress = () => {
-    navigation.goBack();
-  };
+  useEffect(() => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM lichsu', [], (tx, results) => {
+        if (results.rows.length > 0) {
+          const fetchedData = [];
+          for (let index = 0; index < results.rows.length; index++) {
+            const row = results.rows.item(index);
+            fetchedData.push(row);
+          }
+          setData(fetchedData);
+        }
+      });
+    });
+  }, []);
 
-//   if (data.length <= 0) {
-//     return (
-//       <View
-//         style={{
-//           backgroundColor: '#000',
-//           // flex: 1,
-//           justifyContent: 'center',
-//           alignItems: 'center',
-//         }}>
-//         <View
-//           style={{
-//             backgroundColor: '#fff',
-//             height: 40,
-//             borderRadius: 40,
-//             position: 'absolute',
-//             top: 10,
-//             left: 10,
-//           }}>
-//           <TouchableOpacity onPress={handleBackPress} style={{zIndex: 99}}>
-//             <Image
-//               source={require('../asset/icon/back.png')}
-//               resizeMode="contain"
-//               style={{
-//                 width: 40,
-//                 height: 40,
-//               }}
-//             />
-//           </TouchableOpacity>
-//         </View>
-//         <Text
-//           style={{
-//             color: '#fff',
-//           }}>
-//           Không có dữ liệu
-//         </Text>
-//       </View>
-//     );
-//   }
+  if (!data || data.length <= 0) {
+    return (
+      <View style={{flex: 1, backgroundColor: '#000'}}>
+        <View
+          style={{
+            backgroundColor: '#fff',
+            height: 50,
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={{
+              color: '#000',
+              lineHeight: 50,
+              fontWeight: 'bold',
+              fontSize: 20,
+              marginLeft: 10,
+            }}>
+            Lịch sử đọc
+          </Text>
+        </View>
+        {/* Danh sách truyện tranh */}
+        <View
+          style={{
+            textAlign: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{
+              color: '#fff',
+            }}>
+            Không có dữ liệu
+          </Text>
+        </View>
+      </View>
+    );
+  }
 
-//   return (
-//     <View style={{flex: 1}}>
-//       <View
-//         style={{
-//           backgroundColor: '#fff',
-//           height: 50,
-//           flexDirection: 'row',
-//           flexWrap: 'wrap',
-//           justifyContent: 'space-between',
-//         }}>
-//         <TouchableOpacity onPress={handleBackPress} style={{zIndex: 99}}>
-//           <Image
-//             source={require('../asset/icon/back.png')}
-//             resizeMode="contain"
-//             style={{
-//               width: 40,
-//               height: 40,
-//               marginTop: 5,
-//               marginLeft: 10,
-//             }}
-//           />
-//         </TouchableOpacity>
-//         <View
-//           style={{
-//             flexDirection: 'row',
-//             flexWrap: 'wrap',
-//             marginRight: 10,
-//           }}>
-//           <TouchableOpacity
-//             onPress={() => {
-//               setModalVisible(true);
-//             }}>
-//             <Image
-//               source={require('../asset/icon/loupe.png')}
-//               resizeMode="contain"
-//               style={{
-//                 width: 40,
-//                 height: 40,
-//                 marginTop: 5,
-//                 marginRight: 10,
-//               }}
-//             />
-//           </TouchableOpacity>
+  return (
+    <View style={{flex: 1}}>
+      <View
+        style={{
+          backgroundColor: '#fff',
+          height: 50,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+        }}>
+        <Text
+          style={{
+            color: '#000',
+            lineHeight: 50,
+            fontWeight: 'bold',
+            fontSize: 20,
+            marginLeft: 10,
+          }}>
+          Lịch sử đọc
+        </Text>
+      </View>
+      {/* Danh sách truyện tranh */}
+      <FlatList
+        style={{backgroundColor: '#000'}}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        data={data}
+        numColumns={2}
+        renderItem={({item}) => (
+          <View
+            style={{
+              margin: 5,
+            }}>
+            <View
+              style={{
+                width: 170,
+                position: 'relative',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Detail', {slug: item.slug});
+                }}>
+                <Image
+                  style={{width: 170, height: 250}}
+                  source={{
+                    uri: `http://127.0.0.1:8000/${item.path}`,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: '#fafafa',
+                    textAlign: 'center',
+                    maxWidth: 170,
+                    overflow: 'hidden',
+                    fontWeight: 'bold',
+                  }}>
+                  {item.tentruyen}
+                </Text>
 
-//           <TouchableOpacity
-//             onPress={() => {
-//               navigation.navigate('CategoryFilter');
-//             }}>
-//             <Image
-//               source={require('../asset/icon/filter.png')}
-//               resizeMode="contain"
-//               style={{
-//                 width: 40,
-//                 height: 40,
-//                 marginTop: 5,
-//               }}
-//             />
-//           </TouchableOpacity>
-//         </View>
-
-//         <Modal
-//           animationType="slide"
-//           transparent={true}
-//           visible={isModalVisible}
-//           onRequestClose={() => {
-//             setModalVisible(!isModalVisible);
-//           }}>
-//           <TouchableWithoutFeedback
-//             onPress={() => {
-//               setModalVisible(false);
-//             }}>
-//             <View style={{flex: 1, justifyContent: 'flex-start'}}>
-//               <View
-//                 style={{
-//                   backgroundColor: 'white',
-//                   borderRadius: 10,
-//                   flexDirection: 'row',
-//                   justifyContent: 'space-around',
-//                 }}>
-//                 <TextInput
-//                   style={{
-//                     height: 40,
-//                     borderColor: 'gray',
-//                     borderWidth: 1,
-//                     borderRadius: 10,
-//                     margin: 10,
-//                     paddingLeft: 10,
-//                     borderColor: 'green',
-//                     width: '100%',
-//                   }}
-//                   placeholder="Nhập từ khóa tìm kiếm"
-//                   onChangeText={text => setSearchText(text)}
-//                   value={searchText}
-//                 />
-//               </View>
-//             </View>
-//           </TouchableWithoutFeedback>
-//         </Modal>
-//       </View>
-//       {/* Danh sách truyện tranh */}
-//       <FlatList
-//         style={{backgroundColor: '#000'}}
-//         data={filteredData}
-//         numColumns={2}
-//         renderItem={({item}) => (
-//           <View style={{margin: 5, flex: 1}}>
-//             <TouchableOpacity
-//               onPress={() => {
-//                 navigation.navigate('Detail', {slug: item.slug});
-//               }}>
-//               <Image
-//                 style={{width: 170, height: 250}}
-//                 source={{
-//                   uri: `http://127.0.0.1:8000/${item.path}`,
-//                 }}
-//               />
-//               <Text
-//                 style={{
-//                   color: '#fafafa',
-//                   textAlign: 'center',
-//                   maxWidth: 170,
-//                   overflow: 'hidden',
-//                 }}>
-//                 {item.tentruyen}
-//               </Text>
-//             </TouchableOpacity>
-//           </View>
-//         )}
-//         keyExtractor={item => item.id.toString()}
-//         ListEmptyComponent={<Text>No data</Text>}
-//         refreshControl={
-//           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-//         }
-//       />
-//     </View>
-//   );
+                <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Reading', {
+                    slug: item.slug,
+                    id: item.id_tap,
+                  });
+                }}>
+                <Text
+                  style={{
+                    zIndex: 1000,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    width: '100%',
+                    textAlign: 'center',
+                    color: '#fff',
+                    height: 30,
+                    lineHeight: 30,
+                    position: 'absolute',
+                    bottom: 19,
+                  }}>
+                  Đọc tới {item.tentap}
+                </Text>
+              </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+        keyExtractor={item => item.id.toString()}
+        ListEmptyComponent={<Text>No data</Text>}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      />
+    </View>
+  );
 };
 
 export default History;

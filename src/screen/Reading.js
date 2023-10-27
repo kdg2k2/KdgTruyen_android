@@ -54,6 +54,7 @@ const Reading = ({route, navigation}) => {
           result.tentap,
           result.id_tap,
           result.truyen.id,
+          result.truyen.path,
         );
         showLichsu();
       } catch (error) {
@@ -71,7 +72,7 @@ const Reading = ({route, navigation}) => {
   const createTable = () => {
     db.transaction(tx => {
       tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS lichsu (id INTEGER PRIMARY KEY AUTOINCREMENT, tentruyen TEXT, slug TEXT, tentap TEXT, id_tap INTEGER, id_truyen INTEGER);',
+        'CREATE TABLE IF NOT EXISTS lichsu (id INTEGER PRIMARY KEY AUTOINCREMENT, tentruyen TEXT, slug TEXT, tentap TEXT, id_tap INTEGER, id_truyen INTEGER, path TEXT);',
       );
     });
     console.log('created table');
@@ -79,12 +80,12 @@ const Reading = ({route, navigation}) => {
 
   const dropTable = () => {
     db.transaction(tx => {
-      tx.executeSql('DROP TABLE IF EXISTS lichsu;');
+      tx.executeSql('Delete from lichsu;');
     });
-    console.log('droped table');
+    console.log('clean table');
   };
 
-  const insertLichsu = (tentruyen, slug, tentap, id_tap, id_truyen) => {
+  const insertLichsu = (tentruyen, slug, tentap, id_tap, id_truyen, path) => {
     db.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM lichsu WHERE id_truyen = ?',
@@ -93,15 +94,15 @@ const Reading = ({route, navigation}) => {
           if (results.rows.length > 0) {
             if (results.rows.item(0).id_truyen == id_truyen) {
               tx.executeSql(
-                'UPDATE lichsu SET tentruyen=?, slug=?, tentap=?, id_tap=? WHERE id_truyen=?',
-                [tentruyen, slug, tentap, id_tap, id_truyen],
+                'UPDATE lichsu SET tentruyen=?, slug=?, tentap=?, id_tap=?, path=? WHERE id_truyen=?',
+                [tentruyen, slug, tentap, id_tap, path, id_truyen],
               );
               console.log('update ' + id_truyen);
             }
           } else {
             tx.executeSql(
-              'INSERT INTO lichsu (tentruyen, slug, tentap, id_tap, id_truyen) VALUES (?, ?, ?, ?, ?);',
-              [tentruyen, slug, tentap, id_tap, id_truyen],
+              'INSERT INTO lichsu (tentruyen, slug, tentap, id_tap, id_truyen, path) VALUES (?, ?, ?, ?, ?, ?);',
+              [tentruyen, slug, tentap, id_tap, id_truyen, path],
             );
             console.log('insert new');
           }
@@ -117,12 +118,13 @@ const Reading = ({route, navigation}) => {
         if (results.rows.length > 0) {
           for (let index = 0; index < results.rows.length; index++) {
             const row = results.rows.item(index);
-            console.log('------------'+index+'----------');
+            console.log('------------' + index + '----------');
             console.log('Tentruyen: ' + row.tentruyen);
             console.log('Slug: ' + row.slug);
             console.log('Tentap: ' + row.tentap);
             console.log('Id_tap: ' + row.id_tap);
             console.log('Id_truyen: ' + row.id_truyen);
+            console.log('Path: ' + row.path);
           }
         }
       });

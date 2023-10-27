@@ -207,6 +207,7 @@ const ListFilter = ({navigation, route}) => {
                   textAlign: 'center',
                   maxWidth: 170,
                   overflow: 'hidden',
+                  fontWeight: 'bold',
                 }}>
                 {item.tentruyen}
               </Text>

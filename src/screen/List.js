@@ -161,6 +161,7 @@ const List = ({navigation}) => {
                   textAlign: 'center',
                   maxWidth: 170,
                   overflow: 'hidden',
+                  fontWeight: 'bold',
                 }}>
                 {item.tentruyen}
               </Text>

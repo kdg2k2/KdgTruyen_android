@@ -77,6 +77,7 @@ const Home = ({navigation}) => {
                       textAlign: 'center',
                       maxWidth: 170,
                       overflow: 'hidden',
+                      fontWeight: 'bold',
                     }}>
                     {item.tentruyen}
                   </Text>
@@ -108,7 +109,12 @@ const Home = ({navigation}) => {
                 uri: `http://127.0.0.1:8000/${item.path}`,
               }}
             />
-            <Text style={{color: '#fafafa', textAlign: 'center'}}>
+            <Text
+              style={{
+                color: '#fafafa',
+                textAlign: 'center',
+                fontWeight: 'bold',
+              }}>
               {item.tentruyen}
             </Text>
           </TouchableOpacity>
