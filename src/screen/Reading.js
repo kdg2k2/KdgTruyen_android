@@ -32,7 +32,7 @@ const Reading = ({route, navigation}) => {
 
   const [data, setData] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [indexPath, setIndexPath] = useState(null);
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -40,15 +40,10 @@ const Reading = ({route, navigation}) => {
         const result = await fetchData(slug + '/' + id);
         setData(result);
 
-        // console.log('result.truyen.tentruyen: '+result.truyen.tentruyen);;
-        // console.log('result.truyen.slug: '+result.truyen.slug);;
-        // console.log('result.tentap: '+result.tentap);;
-        // console.log('result.id_tap: '+result.id_tap);;
-        // console.log('result.truyen.id: '+result.truyen.id);;
-
         console.log(' ');
         // dropTable();
         createTable();
+
         insertLichsu(
           result.truyen.tentruyen,
           result.truyen.slug,
@@ -58,6 +53,15 @@ const Reading = ({route, navigation}) => {
           result.truyen.path,
         );
         showLichsu();
+
+        // Lưu giá trị indexPath vào state
+        db.transaction(tx => {
+          tx.executeSql('SELECT indexPath FROM lichsu where id_truyen=?', [result.truyen.id], (tx, dt) => {
+            if (dt.rows.length > 0) {
+              setIndexPath(dt.rows.item(0).indexPath);
+            }
+          });
+        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -72,7 +76,7 @@ const Reading = ({route, navigation}) => {
   const createTable = () => {
     db.transaction(tx => {
       tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS lichsu (id INTEGER PRIMARY KEY AUTOINCREMENT, tentruyen TEXT, slug TEXT, tentap TEXT, id_tap INTEGER, id_truyen INTEGER, path TEXT);',
+        'CREATE TABLE IF NOT EXISTS lichsu (id INTEGER PRIMARY KEY AUTOINCREMENT, tentruyen TEXT, slug TEXT, tentap TEXT, id_tap INTEGER, id_truyen INTEGER, path TEXT, indexPath INTEGER);',
       );
     });
     console.log('created table');
@@ -92,17 +96,17 @@ const Reading = ({route, navigation}) => {
         [id_truyen],
         (tx, results) => {
           if (results.rows.length > 0) {
-            if (results.rows.item(0).id_truyen == id_truyen) {
+            if (results.rows.item(0).id_truyen == id_truyen && results.rows.item(0).id_tap != id_tap) {
               tx.executeSql(
-                'UPDATE lichsu SET tentruyen=?, slug=?, tentap=?, id_tap=?, path=? WHERE id_truyen=?',
-                [tentruyen, slug, tentap, id_tap, path, id_truyen],
+                'UPDATE lichsu SET tentruyen=?, slug=?, tentap=?, id_tap=?, path=?, indexPath=? WHERE id_truyen=?',
+                [tentruyen, slug, tentap, id_tap, path, 0, id_truyen],
               );
               console.log('update ' + id_truyen);
             }
           } else {
             tx.executeSql(
-              'INSERT INTO lichsu (tentruyen, slug, tentap, id_tap, id_truyen, path) VALUES (?, ?, ?, ?, ?, ?);',
-              [tentruyen, slug, tentap, id_tap, id_truyen, path],
+              'INSERT INTO lichsu (tentruyen, slug, tentap, id_tap, id_truyen, path, indexPath) VALUES (?, ?, ?, ?, ?, ?, ?);',
+              [tentruyen, slug, tentap, id_tap, id_truyen, path, 0],
             );
             console.log('insert new');
           }
@@ -125,19 +129,23 @@ const Reading = ({route, navigation}) => {
             console.log('Id_tap: ' + row.id_tap);
             console.log('Id_truyen: ' + row.id_truyen);
             console.log('Path: ' + row.path);
+            console.log('indexPath: ' + row.indexPath);
           }
         }
       });
     });
   };
 
-  const handleScrollEnd = event => {
-    const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const viewSize = event.nativeEvent.layoutMeasurement.width;
-    const currentIndex = Math.floor(contentOffsetX / viewSize);
-    setCurrentIndex(currentIndex);
-    const currentItem = data.arr_path[currentIndex];
-    console.log('Lướt đến item:', currentItem);
+  const handleScroll = (event, id_truyen) => {
+    const contentOffsetY = event.nativeEvent.contentOffset.y;
+    const currentIndex = Math.floor(contentOffsetY / screenHeight);
+    db.transaction(tx =>{
+      tx.executeSql(
+        'UPDATE lichsu SET indexPath=? WHERE id_truyen=?',
+        [ currentIndex, id_truyen],
+      );
+    })
+    console.log('Index của ảnh:', currentIndex);
   };
 
   return (
@@ -188,7 +196,7 @@ const Reading = ({route, navigation}) => {
             position: 'absolute',
             top: screenHeight - 80,
             left: 10,
-            borderRadius: 10,
+            borderRadius: 5,
             width: 40,
             height: 40,
           }}
@@ -289,11 +297,10 @@ const Reading = ({route, navigation}) => {
             />
           </View>
         )}
-        // onScrollEndDrag={() => console.log('end')}
-        // onScrollBeginDrag={() => console.log('start')}
-
-        onMomentumScrollEnd={handleScrollEnd}
-        onScrollBeginDrag={() => console.log('Bắt đầu lướt')}
+        // horizontal
+        onScroll={event => handleScroll(event, data.truyen.id)}
+        pagingEnabled
+        initialScrollIndex={indexPath}
       />
     </View>
   );
