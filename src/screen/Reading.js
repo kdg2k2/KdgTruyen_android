@@ -54,16 +54,29 @@ const Reading = ({route, navigation}) => {
         );
         showLichsu();
 
-        // Lưu giá trị indexPath vào state
         db.transaction(tx => {
-          tx.executeSql('SELECT indexPath FROM lichsu where id_truyen=?', [result.truyen.id], (tx, dt) => {
-            if (dt.rows.length > 0) {
-              setIndexPath(dt.rows.item(0).indexPath);
-            }
-          });
+          tx.executeSql(
+            'SELECT indexPath FROM lichsu where id_truyen=?',
+            [result.truyen.id],
+            (tx, dt) => {
+              if (dt.rows.length > 0) {
+                setIndexPath(dt.rows.item(0).indexPath);
+                const wait = new Promise(resolve => setTimeout(resolve, 700));
+                wait.then(() => {
+                  flatListRef.current.scrollToIndex({
+                    animated: false,
+                    index: dt.rows.item(0).indexPath,
+                    viewPosition: 0.5,
+                  });
+                }).catch(error => {
+                  console.error('Lỗi khi cuộn tới index:', error);
+                });
+              }
+            },
+          );
         });
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Lỗi call api, đổi port đê:', error);
       }
     };
     fetchDataFromApi();
@@ -96,7 +109,10 @@ const Reading = ({route, navigation}) => {
         [id_truyen],
         (tx, results) => {
           if (results.rows.length > 0) {
-            if (results.rows.item(0).id_truyen == id_truyen && results.rows.item(0).id_tap != id_tap) {
+            if (
+              results.rows.item(0).id_truyen == id_truyen &&
+              results.rows.item(0).id_tap != id_tap
+            ) {
               tx.executeSql(
                 'UPDATE lichsu SET tentruyen=?, slug=?, tentap=?, id_tap=?, path=?, indexPath=? WHERE id_truyen=?',
                 [tentruyen, slug, tentap, id_tap, path, 0, id_truyen],
@@ -139,12 +155,12 @@ const Reading = ({route, navigation}) => {
   const handleScroll = (event, id_truyen) => {
     const contentOffsetY = event.nativeEvent.contentOffset.y;
     const currentIndex = Math.floor(contentOffsetY / screenHeight);
-    db.transaction(tx =>{
-      tx.executeSql(
-        'UPDATE lichsu SET indexPath=? WHERE id_truyen=?',
-        [ currentIndex, id_truyen],
-      );
-    })
+    db.transaction(tx => {
+      tx.executeSql('UPDATE lichsu SET indexPath=? WHERE id_truyen=?', [
+        currentIndex,
+        id_truyen,
+      ]);
+    });
     console.log('Index của ảnh:', currentIndex);
   };
 
@@ -288,6 +304,11 @@ const Reading = ({route, navigation}) => {
         ref={flatListRef}
         data={data.arr_path}
         keyExtractor={index => index.toString()}
+        getItemLayout={(data, index) => ({
+          length: screenHeight,
+          offset: screenHeight * index,
+          index
+        })}
         renderItem={({item}) => (
           <View>
             <Image
@@ -299,8 +320,7 @@ const Reading = ({route, navigation}) => {
         )}
         // horizontal
         onScroll={event => handleScroll(event, data.truyen.id)}
-        pagingEnabled
-        initialScrollIndex={indexPath}
+        // pagingEnabled
       />
     </View>
   );

@@ -21,7 +21,7 @@ const Home = ({navigation}) => {
       const result = await fetchData('home');
       setData(result);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Lỗi call api, đổi port đê:', error);
     }
   };
 

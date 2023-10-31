@@ -23,7 +23,7 @@ const List = ({navigation}) => {
       const result = await fetchData('list');
       setData(result);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Lỗi call api, đổi port đê:', error);
     }
   };
 

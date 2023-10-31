@@ -21,7 +21,7 @@ const Detail = ({route, navigation}) => {
       const result = await fetchData(slug);
       setData(result);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Lỗi call api, đổi port đê:', error);
     } finally {
       setRefreshing(false);
     }

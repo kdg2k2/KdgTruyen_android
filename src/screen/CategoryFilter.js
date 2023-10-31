@@ -17,7 +17,7 @@ const CategoryFilter = ({navigation}) => {
       const result = await fetchData('category');
       setData(result);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Lỗi call api, đổi port đê:', error);
     }
   };
 

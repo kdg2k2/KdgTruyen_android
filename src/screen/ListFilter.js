@@ -24,7 +24,7 @@ const ListFilter = ({navigation, route}) => {
       const result = await fetchData('list/' + id);
       setData(result);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Lỗi call api, đổi port đê:', error);
     }
   };
 
