@@ -316,7 +316,8 @@ const Reading = ({route, navigation}) => {
           <View>
             <ReactNativeZoomableView
               maxZoom={20}
-              disablePanOnInitialZoom={true}
+              pinchToZoomInSensitivity={3}
+              pinchToZoomOutSensitivity={1}
               contentWidth={300}
               contentHeight={150}>
               <Image
