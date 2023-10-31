@@ -34,6 +34,7 @@ const ListFilter = ({navigation, route}) => {
 
   const handleRefresh = () => {
     setRefreshing(true);
+    setSearchText('');
     fetchDataFromApi().then(() => setRefreshing(false));
   };
 

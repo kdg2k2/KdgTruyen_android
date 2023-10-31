@@ -90,7 +90,7 @@ const Detail = ({route, navigation}) => {
                       marginBottom: 5,
                       borderWidth: 2,
                       borderColor: '#333',
-                      marginTop: 10,
+                      marginTop: 5,
                       padding: 3,
                       borderRadius: 5,
                       fontSize: 13,

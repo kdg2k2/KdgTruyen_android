@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import fetchData from '../api/api';
 import SQLite from 'react-native-sqlite-storage';
+import {ReactNativeZoomableView} from '@openspacelabs/react-native-zoomable-view';
 
 const db = SQLite.openDatabase(
   {
@@ -62,15 +63,17 @@ const Reading = ({route, navigation}) => {
               if (dt.rows.length > 0) {
                 setIndexPath(dt.rows.item(0).indexPath);
                 const wait = new Promise(resolve => setTimeout(resolve, 700));
-                wait.then(() => {
-                  flatListRef.current.scrollToIndex({
-                    animated: false,
-                    index: dt.rows.item(0).indexPath,
-                    viewPosition: 0.5,
+                wait
+                  .then(() => {
+                    flatListRef.current.scrollToIndex({
+                      animated: false,
+                      index: dt.rows.item(0).indexPath,
+                      viewPosition: 0.5,
+                    });
+                  })
+                  .catch(error => {
+                    console.error('Lỗi khi cuộn tới index:', error);
                   });
-                }).catch(error => {
-                  console.error('Lỗi khi cuộn tới index:', error);
-                });
               }
             },
           );
@@ -307,15 +310,21 @@ const Reading = ({route, navigation}) => {
         getItemLayout={(data, index) => ({
           length: screenHeight,
           offset: screenHeight * index,
-          index
+          index,
         })}
         renderItem={({item}) => (
           <View>
-            <Image
-              style={{width: screenWidth, height: screenHeight, flex: 1}}
-              resizeMode="stretch"
-              source={{uri: `http://127.0.0.1:8000/${item}`}}
-            />
+            <ReactNativeZoomableView
+              maxZoom={20}
+              disablePanOnInitialZoom={true}
+              contentWidth={300}
+              contentHeight={150}>
+              <Image
+                style={{width: screenWidth, height: screenHeight, flex: 1}}
+                resizeMode="stretch"
+                source={{uri: `http://127.0.0.1:8000/${item}`}}
+              />
+            </ReactNativeZoomableView>
           </View>
         )}
         // horizontal

@@ -47,8 +47,9 @@ const Home = ({navigation}) => {
               fontSize: 20,
               fontWeight: 'bold',
               marginTop: 10,
+              marginLeft: 5,
             }}>
-            Truyện hot
+            Đọc Nhiều Nhất
           </Text>
           <SwiperFlatList
             style={{
@@ -57,7 +58,7 @@ const Home = ({navigation}) => {
             autoplay
             autoplayDelay={3}
             autoplayLoop
-            index={1}
+            index={0}
             data={data.truyen_view}
             renderItem={({item}) => (
               <View style={{margin: 5, flex: 1}}>
@@ -72,6 +73,7 @@ const Home = ({navigation}) => {
                     }}
                   />
                   <Text
+                    numberOfLines={item.tentruyen.length > 20 ? 1 : 0}
                     style={{
                       color: '#fafafa',
                       textAlign: 'center',
@@ -90,8 +92,9 @@ const Home = ({navigation}) => {
               color: '#fafafa',
               fontSize: 20,
               fontWeight: 'bold',
+              marginLeft: 5,
             }}>
-            Truyện mới cập nhật
+            Mới Cập Nhật
           </Text>
         </>
       }
@@ -110,6 +113,7 @@ const Home = ({navigation}) => {
               }}
             />
             <Text
+              numberOfLines={item.tentruyen.length > 20 ? 1 : 0}
               style={{
                 color: '#fafafa',
                 textAlign: 'center',

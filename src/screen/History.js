@@ -203,6 +203,7 @@ const History = ({navigation}) => {
                 }}
               />
               <Text
+                numberOfLines={item.tentruyen.length > 20 ? 1 : 0}
                 style={{
                   color: '#fafafa',
                   textAlign: 'center',

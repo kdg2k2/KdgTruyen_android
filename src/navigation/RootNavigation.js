@@ -23,7 +23,7 @@ function BottomTab() {
         tabBarStyle: {
           backgroundColor: '#fff',
           elevation: 0,
-          borderRadius: 15,
+          // borderRadius: 30,
           height: 60,
         },
         tabBarShowLabel: false,
@@ -44,7 +44,7 @@ function BottomTab() {
                 }}>
                 <View
                   style={{
-                    backgroundColor: focused ? '#6633FF' : '#fff',
+                    backgroundColor: focused ? '#3333FF' : '#fff',
                     borderRadius: 30,
                     marginBottom: 15,
                     padding: 10,
@@ -78,7 +78,7 @@ function BottomTab() {
                 }}>
                 <View
                   style={{
-                    backgroundColor: focused ? '#4F4F4F' : '#fff',
+                    backgroundColor: focused ? '#FF0033' : '#fff',
                     borderRadius: 30,
                     marginBottom: 15,
                     padding: 10,
@@ -112,7 +112,7 @@ function BottomTab() {
                 }}>
                 <View
                   style={{
-                    backgroundColor: focused ? '#FF6600' : '#fff',
+                    backgroundColor: focused ? '#FFCC33' : '#fff',
                     borderRadius: 30,
                     marginBottom: 15,
                     padding: 10,
