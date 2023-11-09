@@ -34,7 +34,7 @@ const Home = ({navigation}) => {
     fetchDataFromApi().then(() => setRefreshing(false));
   };
 
-  const {width} = Dimensions.get('window');
+  const windowWidth = Dimensions.get('window').width;
 
   return (
     <FlatList
@@ -101,28 +101,34 @@ const Home = ({navigation}) => {
       data={data.truyen_update}
       numColumns={2}
       renderItem={({item}) => (
-        <View style={{margin: 5, flex: 1}}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Detail', {slug: item.slug});
+        <View
+            style={{
+              margin: 5,
+              width: (windowWidth - 20) / 2,
             }}>
-            <Image
-              style={{width: 170, height: 250}}
-              source={{
-                uri: `http://127.0.0.1:8000/${item.path}`,
-              }}
-            />
-            <Text
-              numberOfLines={item.tentruyen.length > 20 ? 1 : 0}
-              style={{
-                color: '#fafafa',
-                textAlign: 'center',
-                fontWeight: 'bold',
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Detail', {slug: item.slug});
               }}>
-              {item.tentruyen}
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Image
+                style={{width: (windowWidth - 20) / 2, height: 250}}
+                source={{
+                  uri: `http://127.0.0.1:8000/${item.path}`,
+                }}
+              />
+              <Text
+                numberOfLines={item.tentruyen.length > 20 ? 1 : 0}
+                style={{
+                  color: '#fafafa',
+                  textAlign: 'center',
+                  maxWidth: (windowWidth - 20) / 2,
+                  overflow: 'hidden',
+                  fontWeight: 'bold',
+                }}>
+                {item.tentruyen}
+              </Text>
+            </TouchableOpacity>
+          </View>
       )}
       keyExtractor={item => item.id.toString()}
       ListEmptyComponent={<Text>No data</Text>}

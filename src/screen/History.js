@@ -25,6 +25,7 @@ const db = SQLite.openDatabase(
 const History = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState([]); // Dữ liệu FlatList
+  const windowWidth = Dimensions.get('window').width;
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -189,7 +190,7 @@ const History = ({navigation}) => {
           <View
             style={{
               margin: 5,
-              width: 170,
+              width: (windowWidth - 20) / 2,
               position: 'relative',
             }}>
             <TouchableOpacity
@@ -197,7 +198,7 @@ const History = ({navigation}) => {
                 navigation.navigate('Detail', {slug: item.slug});
               }}>
               <Image
-                style={{width: 170, height: 250}}
+                style={{width: (windowWidth - 20) / 2, height: 250}}
                 source={{
                   uri: `http://127.0.0.1:8000/${item.path}`,
                 }}
@@ -207,7 +208,7 @@ const History = ({navigation}) => {
                 style={{
                   color: '#fafafa',
                   textAlign: 'center',
-                  maxWidth: 170,
+                  maxWidth: (windowWidth - 20) / 2,
                   overflow: 'hidden',
                   fontWeight: 'bold',
                 }}>

@@ -9,6 +9,7 @@ import {
   RefreshControl,
   Modal,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import fetchData from '../api/api';
 
@@ -17,6 +18,7 @@ const List = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const windowWidth = Dimensions.get('window').width;
 
   const fetchDataFromApi = async () => {
     try {
@@ -148,14 +150,14 @@ const List = ({navigation}) => {
           <View
             style={{
               margin: 5,
-              width: 170,
+              width: (windowWidth - 20) / 2,
             }}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('Detail', {slug: item.slug});
               }}>
               <Image
-                style={{width: 170, height: 250}}
+                style={{width: (windowWidth - 20) / 2, height: 250}}
                 source={{
                   uri: `http://127.0.0.1:8000/${item.path}`,
                 }}
@@ -165,7 +167,7 @@ const List = ({navigation}) => {
                 style={{
                   color: '#fafafa',
                   textAlign: 'center',
-                  maxWidth: 170,
+                  maxWidth: (windowWidth - 20) / 2,
                   overflow: 'hidden',
                   fontWeight: 'bold',
                 }}>
