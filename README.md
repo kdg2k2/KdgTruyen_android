@@ -19,5 +19,5 @@
 1. npm i || yarn
 2. npm run android || yarn android
 
-# Đổi cổng tcp theo cổng server local (chạy server và máy ảo lên trước)
-adb reverse tcp:8000 tcp:8000
+# Đổi cổng tcp theo cổng server local 
+adb reverse tcp:8000 tcp:8000 (chạy server và máy ảo lên trước)

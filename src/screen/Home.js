@@ -67,7 +67,7 @@ const Home = ({navigation}) => {
                     navigation.navigate('Detail', {slug: item.slug});
                   }}>
                   <Image
-                    style={{width: 170, height: 250}}
+                    style={{width: (windowWidth - 20) / 2, height: 250}}
                     source={{
                       uri: `http://127.0.0.1:8000/${item.path}`,
                     }}
@@ -77,7 +77,7 @@ const Home = ({navigation}) => {
                     style={{
                       color: '#fafafa',
                       textAlign: 'center',
-                      maxWidth: 170,
+                      maxWidth: (windowWidth - 20) / 2,
                       overflow: 'hidden',
                       fontWeight: 'bold',
                     }}>
