@@ -315,11 +315,14 @@ const Reading = ({route, navigation}) => {
         renderItem={({item}) => (
           <View>
             <ReactNativeZoomableView
-              maxZoom={20}
-              pinchToZoomInSensitivity={3}
+              maxZoom={1.5}
+              minZoom={0.5}
+              zoomStep={0.5}
+              initialZoom={1}
+              bindToBorders={true}
+              onZoomAfter={this.logOutZoomState}
               pinchToZoomOutSensitivity={1}
-              contentWidth={300}
-              contentHeight={150}>
+              >
               <Image
                 style={{width: screenWidth, height: screenHeight, flex: 1}}
                 resizeMode="stretch"
