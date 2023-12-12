@@ -315,13 +315,15 @@ const Reading = ({route, navigation}) => {
         renderItem={({item}) => (
           <View>
             <ReactNativeZoomableView
-              maxZoom={1.5}
+              maxZoom={3}
               minZoom={0.5}
-              zoomStep={0.5}
+              zoomStep={1}
               initialZoom={1}
               bindToBorders={true}
               onZoomAfter={this.logOutZoomState}
               pinchToZoomOutSensitivity={1}
+              longPressDuration={1500}
+              visualTouchFeedbackEnabled={true}
               >
               <Image
                 style={{width: screenWidth, height: screenHeight, flex: 1}}
