@@ -1,0 +1,144 @@
+commit 77a530509238e91054189c9c3d74483c5fd7b4a3
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Wed Oct 18 10:01:31 2023 +0700
+
+    commit
+
+commit f32ec99c4447603dfba8d2cb6f2180385f4aaeb9
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Wed Oct 18 13:28:27 2023 +0700
+
+    thêm btn tab
+
+commit 92d51d6d360c74cbcc2f638906720859647b02be
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Wed Oct 18 20:24:29 2023 +0700
+
+    config bottomtab
+
+commit 26e7e6e5e81f5af26607817cee662ff3fe15ec73
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Wed Oct 18 22:21:37 2023 +0700
+
+    thêm menu chuyển chap trong màn reading
+
+commit b5f69e1337f1bf884c4f673f160c99be925b077e
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Wed Oct 18 23:14:58 2023 +0700
+
+    chức năng reload trang
+
+commit 7eb5b31a6c09cd18758bf827dcc8222a8dbad2d1
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Thu Oct 19 07:40:13 2023 +0700
+
+    tạo slide trang home
+
+commit f9b5682896ecdf8bc1f47343fcd1b08350d408cb
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Thu Oct 19 07:49:15 2023 +0700
+
+    fix lỗi cuộn màn hình chính
+
+commit 663f7890bcefd5c8a1d1de8673ba8de084659cf4
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Thu Oct 19 10:16:22 2023 +0700
+
+    lọc theo thể loại
+
+commit 1c0200cdaf3db11ce68011e23c9d43980cf16a5f
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Mon Oct 23 13:17:21 2023 +0700
+
+    fix warning màn detail
+
+commit 086efa0791fee8a7d30d691a7098c8a6b678e3dd
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Mon Oct 23 15:36:28 2023 +0700
+
+    kết nối sqlite
+
+commit 10ee8ee0d50fe98255cc5c55cf47b29ad229084d
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Mon Oct 23 21:29:58 2023 +0700
+
+    viết hàm insert lịch sử có kiểm tra điều kiện
+
+commit e287ab05ff0374a65ff44b4b51f4f400b25c7ab2
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Tue Oct 24 10:54:10 2023 +0700
+
+    custom màu nền buttom tab
+
+commit 64accf24bedb37628c478e10d81e776a04570aec
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Fri Oct 27 21:21:35 2023 +0700
+
+    lưu lịch sử đọc truyện
+
+commit be7e2d43be18d84626b679b5dd02d0f16f97d079
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Fri Oct 27 22:46:28 2023 +0700
+
+    thêm nút xóa lịch sử, sự kiện refresh lịch sử
+
+commit 21cd0474cab84126b498f5928b658c535a4d0797
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Fri Oct 27 23:34:46 2023 +0700
+
+    nghe sự kiện lướt log ra path
+
+commit e2dd06e83c6bad852da2be837de592817c427b29
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Mon Oct 30 16:46:47 2023 +0700
+
+    lưu lịch sủ theo trang đang đọc
+
+commit 02db65a2edc6dd1ff6166756bebaaaae6aa1fb78
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Tue Oct 31 10:07:07 2023 +0700
+
+    fix lỗi cuộn tới trang cuối cùng đọc
+
+commit 6c6b90442b4ff74f1a132d4fdc8bff6e9424f52a
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Tue Oct 31 15:21:32 2023 +0700
+
+    zoom ảnh, hiển thị tên truyện 1 dòng
+
+commit 73ba72409cee80a3377358d00e36c3117200879c
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Tue Oct 31 15:41:22 2023 +0700
+
+    .
+
+commit 1bfa19b88021e01d0180bea07c93c474a906f8a8
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Tue Oct 31 15:54:57 2023 +0700
+
+    flash icon cho app
+
+commit 3a62457b400f1ad0fb86b38532784513169f4dc0
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Thu Nov 9 14:30:27 2023 +0700
+
+    .
+
+commit 9b578e128f3c4b2d237fc969d0681cc32959d69e
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Thu Nov 23 16:49:07 2023 +0700
+
+    .
+
+commit 1191e9a44bbecf1ec36fb3d78e6cd3914cf3eeaf
+Author: RnD <rnd@ifee.edu.vn>
+Date:   Tue Dec 12 13:53:10 2023 +0700
+
+    config zoom
+
+commit 83549aa9640250e5298b3888b7efa5cf2d705166 (HEAD -> main, origin/main)
+Author: kdg2k2 <kdg2k2@gmail.com>
+Date:   Tue Dec 12 14:13:10 2023 +0700
+
+    .
+(END)
